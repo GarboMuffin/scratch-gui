@@ -18,6 +18,7 @@ import {BLOCKS_DEFAULT_SCALE, STAGE_DISPLAY_SIZES} from '../lib/layout-constants
 import DropAreaHOC from '../lib/drop-area-hoc.jsx';
 import DragConstants from '../lib/drag-constants';
 import defineDynamicBlock from '../lib/define-dynamic-block';
+import LoadScratchBlocksHOC from '../lib/tw-load-scratch-blocks-hoc.jsx';
 
 import {connect} from 'react-redux';
 import {updateToolbox} from '../reducers/toolbox';
@@ -723,5 +724,5 @@ export default errorBoundaryHOC('Blocks')(
     connect(
         mapStateToProps,
         mapDispatchToProps
-    )(Blocks)
+    )(LoadScratchBlocksHOC(Blocks))
 );

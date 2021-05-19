@@ -4,12 +4,24 @@ const isLoaded = () => !!_ScratchBlocks;
 
 const get = () => {
     if (!isLoaded()) {
-        _ScratchBlocks = require('scratch-blocks');
+        throw new Error('scratch-blocks is not loaded yet');
     }
     return _ScratchBlocks;
 };
 
+const load = () => {
+    if (_ScratchBlocks) {
+        return Promise.resolve();
+    }
+    return import(/* webpackChunkName: "scratch-blocks" */'scratch-blocks')
+        .then(m => {
+            _ScratchBlocks = m.default;
+            return _ScratchBlocks;
+        });
+};
+
 export default {
+    get,
     isLoaded,
-    get
+    load
 };
