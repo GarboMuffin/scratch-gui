@@ -1,6 +1,8 @@
 import React from 'react';
 import log from './log';
 import LazyScratchBlocks from './tw-lazy-scratch-blocks';
+import LoadingSpinner from '../components/tw-loading-spinner/spinner.jsx';
+import CrashMessage from '../components/crash-message/crash-message.jsx';
 
 const LoadScratchBlocksHOC = function (WrappedComponent) {
     class LoadScratchBlocks extends React.Component {
@@ -10,8 +12,6 @@ const LoadScratchBlocksHOC = function (WrappedComponent) {
                 loaded: LazyScratchBlocks.isLoaded(),
                 error: null
             };
-        }
-        componentDidMount () {
             if (!this.state.loaded) {
                 LazyScratchBlocks.load()
                     .then(() => {
@@ -27,12 +27,22 @@ const LoadScratchBlocksHOC = function (WrappedComponent) {
                     });
             }
         }
+        handleReload () {
+            location.reload();
+        }
         render () {
             if (this.state.error !== null) {
-                return <p>{this.state.error}</p>;
+                return (
+                    <CrashMessage
+                        errorMessage={`lazy scratch-blocks: ${this.state.error}`}
+                        onReload={this.handleReload}
+                    />
+                );
             }
             if (!this.state.loaded) {
-                return <p>Loading...</p>;
+                return (
+                    <LoadingSpinner />
+                );
             }
             return (
                 <WrappedComponent
